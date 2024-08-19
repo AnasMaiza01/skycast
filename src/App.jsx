@@ -16,6 +16,8 @@ function App() {
   const [humidity, setHumidity] = useState(0);
   const [weatherCondition, setWeatherCondition] = useState("");
   const [error, setError] = useState(null);
+  const [searchedCities, setSearchedCities] = useState([]);
+  const [input, setInput] = useState("");
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -84,7 +86,9 @@ function App() {
         };
         const weatherCode = hourlyData.weathercode[currentHour];
         setWeatherCondition(weatherCodeToDescription[weatherCode] || "Unknown");        
-      })
+      }).catch((err) => {
+        console.error("Error fetching weather data:", err.message);
+      });
     }
   }, [longitude, latitude]);
 
@@ -92,10 +96,40 @@ function App() {
     console.log(error);
   }
 
+  useEffect(() => {
+    if (input == "") {
+      setSearchedCities([]);
+    }
+    else {
+      console.log(input);
+      var api = `https://nominatim.openstreetmap.org/search?city=${input}&format=json`
+      axios.get(api).then((response) => {
+        var data = response.data;
+        setSearchedCities(data.map(city => city.display_name));
+      }).catch((err) => {
+        console.error("Error fetching data:", err.message);
+        setSearchedCities([]);
+      });
+    }
+  }, [input]);
+
+  function handleChange(e) {
+      setInput(e.target.value);
+  }
+
   return (
     <div className="App">
       <div className='search-input'>
-        <input type="text" placeholder='Search' />
+        <input type="text" placeholder='Search' value={input} onChange={handleChange} />
+      </div>
+      <div className='cities'>
+        {searchedCities.map((city, index) => {
+          return (
+            <p key={index} className='city'>
+              {city}
+            </p>
+          )
+        })}
       </div>
       <img src={sunnyIcon} className='weatherIcon' />
       <div className='myCity'>

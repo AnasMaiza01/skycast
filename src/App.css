@@ -13,6 +13,10 @@
   align-items: center;
 }
 
+.App * {
+  transition: 0.3s;
+}
+
 .search-input {
   position: relative;
   display: inline-block;
@@ -50,6 +54,26 @@
   font-size: 20px;
   color: #999;
   pointer-events: none;
+}
+
+.cities {
+  width: 80%;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: rgba(128, 128, 128, 0.317);
+  position: fixed;
+  top:12%;
+}
+
+.cities * {
+  width: 100%;
+  margin: 0;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.cities *:hover {
+  background-color: rgba(128, 128, 128, 0.6);
 }
 
 .weatherIcon {
