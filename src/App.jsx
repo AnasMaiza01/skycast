@@ -105,7 +105,11 @@ function App() {
       var api = `https://nominatim.openstreetmap.org/search?city=${input}&format=json`
       axios.get(api).then((response) => {
         var data = response.data;
-        setSearchedCities(data.map(city => city.display_name));
+        setSearchedCities(data.map(city => ({
+          name: city.display_name,
+          lat: city.lat,
+          lon: city.lon,
+        })));
       }).catch((err) => {
         console.error("Error fetching data:", err.message);
         setSearchedCities([]);
@@ -117,6 +121,13 @@ function App() {
       setInput(e.target.value);
   }
 
+  function handleCityClick(lat, lon) {
+    setLatitude(lat);
+    setLongitude(lon);
+    setInput("");
+    setSearchedCities([]);
+  }
+
   return (
     <div className="App">
       <div className='search-input'>
@@ -125,8 +136,8 @@ function App() {
       <div className='cities'>
         {searchedCities.map((city, index) => {
           return (
-            <p key={index} className='city'>
-              {city}
+            <p key={index} className='city' onClick={() => handleCityClick(city.lat, city.lon)}>
+              {city.name}
             </p>
           )
         })}
