@@ -2,6 +2,11 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css'
 import sunnyIcon from './assets/weatherIcons/sunny.svg';
+import sunnyCloudyIcon from './assets/weatherIcons/sunny_cloudy.svg';
+import sunRainyIcon from './assets/weatherIcons/sunRainy.svg';
+import rainyIcon from './assets/weatherIcons/rainy.svg';
+import thunderIcon from './assets/weatherIcons/thunder.svg';
+import nightIcon from './assets/weatherIcons/night.svg';
 import humidityIcon from './assets/icons/humidity.svg';
 import windSpeedIcon from './assets/icons/windSpeed.svg';
 
@@ -41,7 +46,7 @@ function App() {
       axios.get(api).then((response) => {
         var data = response.data;
         setCountry(data.address.country);
-        setState(data.address.state);
+        setState(data.address.state || data.address.city);
       })
 
       const weatherApi = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m,weathercode&timezone=Europe%2FMadrid`;
@@ -101,7 +106,6 @@ function App() {
       setSearchedCities([]);
     }
     else {
-      console.log(input);
       var api = `https://nominatim.openstreetmap.org/search?city=${input}&format=json`
       axios.get(api).then((response) => {
         var data = response.data;
@@ -128,6 +132,20 @@ function App() {
     setSearchedCities([]);
   }
 
+  const weatherIcons = {
+    "Clear sky": sunnyIcon,
+    "Mainly clear": sunnyCloudyIcon,
+    "Partly cloudy": sunnyCloudyIcon,
+    "Overcast": nightIcon,
+    "Light rain": sunRainyIcon,
+    "Moderate rain": rainyIcon,
+    "Heavy rain": rainyIcon,
+    "Thunderstorms": thunderIcon,
+    "Thunderstorms with hail": thunderIcon,
+  };
+
+  const currentWeatherIcon = weatherIcons[weatherCondition] || sunnyIcon;
+
   return (
     <div className="App">
       <div className='search-input'>
@@ -142,7 +160,7 @@ function App() {
           )
         })}
       </div>
-      <img src={sunnyIcon} className='weatherIcon' />
+      <img src={currentWeatherIcon} className='weatherIcon' alt='Weather Icon' />
       <div className='myCity'>
         <h4 className='currentCity'>{ state }, { country }</h4>
         <div className='temperature'>

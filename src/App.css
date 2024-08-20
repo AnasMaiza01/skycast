@@ -77,7 +77,8 @@
 }
 
 .weatherIcon {
-  width: 70%;
+  margin: 20px 0;
+  height: 200px;
 }
 
 .myCity {
