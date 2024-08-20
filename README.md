@@ -33,6 +33,7 @@ SkyCast is a weather application built using React.js. The app provides weather 
 - Upon loading, the app will attempt to fetch your current location and display the weather for that location.
 - Use the search bar to find weather information for different cities.
 - Click on a city from the search results to view its weather data.
+- **View the application online:** [SkyCast](https://skycastapplication.netlify.app/)
 
 ## License
 
